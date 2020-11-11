@@ -1,1 +1,1 @@
-# tools_for_dna_binding_proteins
+# Tools for DNA-binding proteins
