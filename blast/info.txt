@@ -1,0 +1,1 @@
+batch scripts and the blast instilation goes in this folder
