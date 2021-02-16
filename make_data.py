@@ -27,6 +27,11 @@ def go_id_labeler(go_id='GO:0003677'):
 
 def sanitize_string(the_string):
     return (the_string.replace(" ", "_")).lower()
+def sequences_unsure(df):
+    df_mean=df.groupby('Sequence')['dna_binding'].mean().reset_index()
+    tol=1e-5
+    seqs=df_mean[np.logical_and(df_mean['dna_binding']<(1-tol),df_mean['dna_binding']>tol)]['Sequence'].values
+    return seqs
 
 PATH_TO_CSV="data/"
 df_bac=pd.read_csv(f'{PATH_TO_CSV}uniprot_data.tab',sep='\t')
@@ -34,7 +39,7 @@ df_bac=pd.read_csv(f'{PATH_TO_CSV}uniprot_data.tab',sep='\t')
 GO_CODE='GO:0003677'
 label='dna_binding'
 df_bac[label]=df_bac['Gene ontology IDs'].apply(go_id_labeler(GO_CODE))
-
+df_bac=df_bac[np.logical_not(df_bac['Sequence'].isin(sequences_unsure(df_bac)))]
 
 
 species_to_test=['Escherichia coli', 'Mycobacterium tuberculosis']

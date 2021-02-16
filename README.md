@@ -51,13 +51,16 @@ For all the models, the data sets are determined by the `name` and `suffix` vari
 - Run the generated `blast` scripts
 - Run NN.py in code_for_models
 
-### CNN, LSTM, biLSTM
- All of them assume that you have TensorFlow 2 
+### LSTM, biLSTM
+ Both of them assume that you have TensorFlow 2 
 
 ### XGBoost
 You need the embedding by ESM in a datafame to run Xgboost.py. For the provided data sets the embeddings are found at TODO and needs to go in your data folder under the name `fb_embed.csv`. 
 
+## Generating the species data
+Running the code in `make_data_for_species_test.py` will generate the species data sets for the paper. Combine the bac and euk training sets to get the combined data set. Use the test set correspnding to the species kingdom in this case. 
+
 ## Generating the tables of the results
 The predictions of the models on the test sets used in the paper are in the results folder. 
 
-Also included is see_results.ipynb. This jupyter notebook contains the code for the metrics in the paper and can output all the tables used in the paper.
+This jupyter notebook `see_results.ipynb` contains the code for the metrics in the paper and can output all the figures used in the paper.
