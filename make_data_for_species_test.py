@@ -48,7 +48,7 @@ def train_test(df,hold_out,label="dna_binding",level="species",remove_test_data_
     return train_set,test_set
 
 PATH_TO_CSV="data/"
-df_bac=pd.read_csv(f'{PATH_TO_CSV}uniprot_data.tab',sep='\t')
+df_bac=pd.read_csv(f'{PATH_TO_CSV}uniprot_data_bac.tab',sep='\t')
 df_bac.dropna(subset=['Sequence', 'Gene ontology IDs',
                       'Taxonomic lineage (SPECIES)'],inplace=True)
 
