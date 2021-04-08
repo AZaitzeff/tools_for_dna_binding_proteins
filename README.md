@@ -1,6 +1,30 @@
 # Tools for DNA-binding proteins
 
-## Generating the data sets
+To use the same data sets from the paper, unzip the zip files in the data folder. 
+
+## Generating the species data from the paper
+Running the code in `make_data_for_species_test.py` will generate the species data sets for the paper. Combine the bac and euk training sets to get the combined data set. Use the test set correspnding to the species kingdom in this case. 
+
+## Generating the tables of the results
+The predictions of the models on the test sets used in the paper are in the results folder. 
+
+This jupyter notebook `see_results.ipynb` contains the code for the metrics in the paper and can output all the figures used in the paper.
+
+## Running the models
+For all the models, the data sets are determined by the `name` and `suffix` variables. 
+
+### Nearest Neighbors 
+- Run `nearest_nearbor_generation.py` to generate the fasfa files and bash scripts for blast. 
+- Run the generated `blast` scripts
+- Run NN.py in code_for_models
+
+### LSTM, biLSTM
+ Both of them assume that you have TensorFlow 2 
+
+### XGBoost
+You need the embedding by ESM in a datafame to run Xgboost.py. For the provided data sets the embeddings are found at TODO and needs to go in your data folder under the name `fb_embed.csv`. 
+
+## How to generate your own data sets
 
 ### run get_data.sh
 
@@ -42,25 +66,3 @@ This function generates
 ### Run make_data_train_test_far_from_test.py
 - this file generates the training and validation set that only contains sequences that are far away (as measured by BLAST percent identity) from the testing set
 - You can change how far away this limit is by changing the `PI_LIMIT` variable
-
-## Running the models
-For all the models, the data sets are determined by the `name` and `suffix` variables. 
-
-### Nearest Neighbors 
-- Run `nearest_nearbor_generation.py` to generate the fasfa files and bash scripts for blast. 
-- Run the generated `blast` scripts
-- Run NN.py in code_for_models
-
-### LSTM, biLSTM
- Both of them assume that you have TensorFlow 2 
-
-### XGBoost
-You need the embedding by ESM in a datafame to run Xgboost.py. For the provided data sets the embeddings are found at TODO and needs to go in your data folder under the name `fb_embed.csv`. 
-
-## Generating the species data
-Running the code in `make_data_for_species_test.py` will generate the species data sets for the paper. Combine the bac and euk training sets to get the combined data set. Use the test set correspnding to the species kingdom in this case. 
-
-## Generating the tables of the results
-The predictions of the models on the test sets used in the paper are in the results folder. 
-
-This jupyter notebook `see_results.ipynb` contains the code for the metrics in the paper and can output all the figures used in the paper.
