@@ -22,7 +22,7 @@ For all the models, the data sets are determined by the `name` and `suffix` vari
  Both of them assume that you have TensorFlow 2 
 
 ### XGBoost
-You need the embedding by ESM in a datafame to run Xgboost.py. For the provided data sets the embeddings are found at TODO and needs to go in your data folder under the name `fb_embed.csv`. 
+You need the embedding by ESM in a datafame to run Xgboost.py. For the provided data sets, please contact me for the embeddings and they need to go in your data folder under the name `fb_embed.csv`. 
 
 ## How to generate your own data sets
 
