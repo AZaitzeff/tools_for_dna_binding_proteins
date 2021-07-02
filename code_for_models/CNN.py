@@ -1,11 +1,7 @@
 import pandas as pd
 import numpy as np
 from math import ceil
-from random import randrange
-from random import sample
 from tensorflow.keras import losses
-from tensorflow.keras import metrics
-from tensorflow.keras import Model
 from tensorflow.keras import models
 from tensorflow.keras import optimizers
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint

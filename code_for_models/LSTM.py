@@ -9,9 +9,6 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Activation, Embedding, LSTM, GRU, SimpleRNN, Conv1D, MaxPooling1D
 import pandas as pd
 import numpy as np
-from math import ceil
-from random import randrange
-from random import sample
 from tensorflow.keras import metrics
 from tensorflow.keras.callbacks import EarlyStopping
 
