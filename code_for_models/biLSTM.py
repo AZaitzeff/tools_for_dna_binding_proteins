@@ -11,9 +11,6 @@ from tensorflow.keras.layers import (
     Lambda, TimeDistributed, Input, Masking, Bidirectional)
 import pandas as pd
 import numpy as np
-from math import ceil
-from random import randrange
-from random import sample
 from tensorflow.keras import metrics
 from tensorflow.keras.callbacks import EarlyStopping
 

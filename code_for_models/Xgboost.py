@@ -1,7 +1,6 @@
 from xgboost import XGBClassifier
 import pandas as pd
 import numpy as np
-from math import ceil
 
 good_species=['escherichia_coli', 'mycobacterium_tuberculosis']
 level="species"

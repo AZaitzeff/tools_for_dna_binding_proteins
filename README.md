@@ -2,6 +2,21 @@
 
 To use the same data sets from the paper, unzip the zip files in the data folder. 
 
+## Installing required software
+
+The code here requires Python version >= 3.7. 
+
+It additionally requires specific Python packages. These are enumerated in 2 places for easy install.
+ 
+1) Install via pip. Note: we recommend installing packages in a virtual environment to handle separation of different software versions. Try [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv) if you are unfamiliar with virtual environment .
+    
+    `pip install -r requirements.txt`
+    
+2) Alternately, install via Conda
+
+    `conda env create -f conda_environment.yml`
+
+
 ## Generating the species data from the paper
 Running the code in `make_data_for_species_test.py` will generate the species data sets for the paper. Combine the bac and euk training sets to get the combined data set. Use the test set correspnding to the species kingdom in this case. 
 
@@ -19,9 +34,12 @@ For all the models, the data sets are determined by the `name` and `suffix` vari
 - Run NN.py in code_for_models
 
 ### LSTM, biLSTM
- Both of them assume that you have TensorFlow 2 
+Both of them assume that you have TensorFlow 2 
 
 ### XGBoost
+
+!!!!todo: include these in Zenodo
+
 You need the embedding by ESM in a datafame to run Xgboost.py. For the provided data sets, please contact me for the embeddings and they need to go in your data folder under the name `fb_embed.csv`. 
 
 ## How to generate your own data sets

@@ -1,0 +1,16 @@
+name: dna_binding_tools
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.7
+  # todo: pin version correct?
+  - numpy=1.21.*
+  - pandas
+  - matplotlib
+  - seaborn
+  - scikit-learn
+  - bioconda::goatools
+  - pip
+  - pip:
+    - tensorflow

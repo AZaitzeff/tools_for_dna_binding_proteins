@@ -1,0 +1,6 @@
+seaborn
+numpy==1.19.*
+sklearn
+pandas
+goatools
+tensorflow
