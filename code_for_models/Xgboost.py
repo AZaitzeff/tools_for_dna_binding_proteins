@@ -7,7 +7,8 @@ level="species"
 PATH_TO_RESULTS='../results/'
 PATH_TO_CSV="../data/"
 cols=[f"fb_embed_{i}" for i in range(1280)]
-df_fb=pd.read_csv(f"{PATH_TO_CSV}fb_embed.csv")
+df_fb=pd.concat([pd.read_csv(f"../dna_binding_protein_esm/fb_embed_not_bac.csv"),pd.read_csv(f"../dna_binding_protein_esm/fb_embed_bac.csv")])
+df_fb.drop_duplicates('Sequence',inplace=True)
 suffix="full" #change for different data set
 
 for name in good_species:

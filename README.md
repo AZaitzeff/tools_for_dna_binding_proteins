@@ -38,9 +38,7 @@ Both of them assume that you have TensorFlow 2
 
 ### XGBoost
 
-!!!!todo: include these in Zenodo
-
-You need the embedding by ESM in a datafame to run Xgboost.py. For the provided data sets, please contact me for the embeddings and they need to go in your data folder under the name `fb_embed.csv`. 
+You need the embedding by ESM in a datafame to run Xgboost.py. These are at [10.5281/zenodo.5153906](https://doi.org/10.5281/zenodo.5153906) file `dna_binding_protein_esm.zip`.
 
 ## How to generate your own data sets
 
