@@ -10,7 +10,8 @@ dependencies:
   - matplotlib
   - seaborn
   - scikit-learn
+  - xgboost
   - bioconda::goatools
   - pip
   - pip:
-    - tensorflow
+    - tensorflow==2.*
