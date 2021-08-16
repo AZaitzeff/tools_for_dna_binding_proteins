@@ -94,46 +94,57 @@ def data_gen_mask(batch_size, train_set, Y):
 
 
 
-good_species=['escherichia_coli', 'mycobacterium_tuberculosis']  #change for different data set
-level="species"
-PATH_TO_RESULTS='../results/'
-PATH_TO_CSV="../data/"
-suffix="full" #change for different data set
-for name in good_species:
-    if name=='escherichia_coli':
-        maxlen = 5500 #change for different data set
-    else:
-        maxlen = 5500 #change for different data set
-    test_set=pd.read_csv(f"{PATH_TO_CSV}{name}_test_{suffix}.csv")
-    train_set=pd.read_csv(f"{PATH_TO_CSV}{name}_train_{suffix}.csv")
-    valid_set=pd.read_csv(f"{PATH_TO_CSV}{name}_valid_{suffix}.csv")
+PATH_TO_RESULTS='../revised_cnn_results/'
+PATH_TO_CSV="../revised_protein_data/"
+suffix="40_1000" #change for different data set
+maxlen = 1000 #change for different data set
+name="random"
+
+test_set=pd.read_csv(f"{PATH_TO_CSV}{name}_test_{suffix}.csv")
+train_set_full=pd.read_csv(f"{PATH_TO_CSV}{name}_train_{suffix}.csv")
+X_test=test_set['Sequence'].apply(trans)
+X_test = sequence.pad_sequences(X_test, maxlen=maxlen)
+np.random.seed(42)
+N=train_set_full.shape[0]
+split=[n for n in range(N)]
+np.random.shuffle(split)
+N20=int(N*.2)
+mask_int=np.zeros(N)
+for i in range(4):
+    mask_int[split[i*N20:(i+1)*N20]]=i
+mask_int[split[4*N20:]]=4
+for n_i in [0,1,2,3,4]:
+    print(name,n_i)
+    msk = mask_int!=n_i
+    train_set=train_set_full[msk]
+    valid_set=train_set_full[~msk]
     Y=train_set['dna_binding'].values
     Yv=valid_set['dna_binding'].values
-    Yt=test_set['dna_binding'].values
-    list_of_pred=[]
-    for n_i,rand_ind in enumerate([42,421,4211]):
-        print(name,n_i)
-        X_test=test_set['Sequence'].apply(trans)
-        X_test = sequence.pad_sequences(X_test, maxlen=maxlen)
-        model=make_model()
-        stopping_callback = EarlyStopping(
-                monitor="val_roc_auc", mode="max", min_delta=0, patience=10, restore_best_weights=False
-            )
-        callbacks_list = [stopping_callback]
-        X_valid=valid_set['Sequence'].apply(trans)
-        X_valid = sequence.pad_sequences(X_valid, maxlen=maxlen)
-        model.fit(
-                data_gen_mask(batch_size, train_set, Y),
-                epochs=1000,
-                verbose=2,
-                steps_per_epoch=125,
-                validation_data=(X_valid,Yv),
-                callbacks=callbacks_list,
-            )
-        predictions=model.predict(X_test)[:,0]
-        list_of_pred.append(predictions)
-    pred=np.median(np.stack(list_of_pred),axis=0)
-    np.save(f'{PATH_TO_RESULTS}results_lstm_{name}_{suffix}.npy',pred)
+
+    model=make_model()
+    stopping_callback = EarlyStopping(
+            monitor="val_roc_auc", mode="max", min_delta=0, patience=10
+        )
+    callbacks_list = [stopping_callback]
+    X_valid=valid_set['Sequence'].apply(trans)
+    X_valid = sequence.pad_sequences(X_valid, maxlen=maxlen)
+    
+    X_train=train_set['Sequence'].apply(trans)
+    X_train = sequence.pad_sequences(X_train, maxlen=maxlen)
+    model.fit(
+            x=X_train,
+            y=Y,
+            batch_size = 128,
+            epochs=100,
+            verbose=2,
+            #steps_per_epoch=ceil(2*np.sum(train_set['dna_binding'])/batch_size),
+            #validation_data=(X_valid,Yv),
+        )
+    predictions=model.predict(X_test)[:,0]
+    np.save(f'results_lstm_orig_{name}_{suffix}_{n_i}.npy',predictions)
+    predictions=model.predict(X_valid)[:,0]
+    np.save(f'results_valid_lstm_orig_{name}_{suffix}_{n_i}.npy',predictions)
+    np.save(f'true_valid_lstm_orig_{name}_{suffix}_{n_i}.npy',Yv)
 
 
 # In[ ]:

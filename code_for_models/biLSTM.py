@@ -96,46 +96,48 @@ def data_gen(batch_size, train_set, Y):
 
 
 
-good_species=['escherichia_coli', 'mycobacterium_tuberculosis'] #changed for different data set
-VALID_SIZE=128
-PATH_TO_RESULTS='../results/'
-PATH_TO_CSV="../data/" 
-suffix="full" #change for different data set
-for name in good_species:
-    if name=='escherichia_coli':
-        maxlen = 5500 #change for different data set
-    else:
-        maxlen = 5500 #change for different data set
-    test_set=pd.read_csv(f"{PATH_TO_CSV}{name}_test_{suffix}.csv")
-    train_set=pd.read_csv(f"{PATH_TO_CSV}{name}_train_{suffix}.csv")
-    valid_set=pd.read_csv(f"{PATH_TO_CSV}{name}_valid_{suffix}.csv")
+PATH_TO_RESULTS='../revised_cnn_results/'
+PATH_TO_CSV="../revised_protein_data/" 
+name="random" #change for different data set
+suffix="40_1000" #change for different data set
+maxlen = 1000 #change for different data set
+test_set=pd.read_csv(f"{PATH_TO_CSV}{name}_test_{suffix}.csv")
+train_set_full=pd.read_csv(f"{PATH_TO_CSV}{name}_train_{suffix}.csv")
+X_test=test_set['Sequence'].apply(encode)
+X_test = sequence.pad_sequences(X_test, maxlen=maxlen)
+for n_i,rand_ind in enumerate([.9,.85,.8]):
+    if n_i>0:
+        continue
+    print(name,n_i)
+    N=train_set_full.shape[0]
+    split=[n for n in range(N)]
+    np.random.shuffle(split)
+    N90=int(N*rand_ind)
+    first90=split[:N90]
+    last10=split[N90:]
+    train_set=train_set_full.iloc[first90]
+    valid_set=train_set_full.iloc[last10]
     Y=train_set['dna_binding'].values
     Yv=valid_set['dna_binding'].values
-    Yt=test_set['dna_binding'].values
-    list_of_pred=[]
-    for n_i,rand_ind in enumerate([42,421,4211]):
-        print(name,n_i)
-        X_test=test_set['Sequence'].apply(encode)
-        X_test = sequence.pad_sequences(X_test, maxlen=maxlen)
-        model=make_model()
-        stopping_callback = EarlyStopping(
-                monitor="val_roc_auc", mode="max", min_delta=0, patience=10, restore_best_weights=False
-            )
-        callbacks_list = [stopping_callback]
-        X_valid=valid_set['Sequence'].apply(encode)
-        X_valid = sequence.pad_sequences(X_valid, maxlen=maxlen)
-        model.fit(
-                data_gen(batch_size, train_set, Y),
-                epochs=1000,
-                verbose=2,
-                steps_per_epoch=125,
-                validation_data=(X_valid,Yv),
-                callbacks=callbacks_list,
-            )
-        predictions=model.predict(X_test)[:,0]
-        list_of_pred.append(predictions)
-    pred=np.median(np.stack(list_of_pred),axis=0)
-    np.save(f'{PATH_TO_RESULTS}results_bilstm_{name}_{suffix}.npy',pred)
+
+    model=make_model()
+    X_valid=valid_set['Sequence'].apply(encode)
+    X_valid = sequence.pad_sequences(X_valid, maxlen=maxlen)
+    
+    X_train=train_set['Sequence'].apply(encode)
+    X_train = sequence.pad_sequences(X_train, maxlen=maxlen)
+    model.fit(
+            x=X_train,
+            y=Y,
+            batch_size=batch_size,
+            epochs=200,
+            verbose=2,
+        )
+    predictions=model.predict(X_test)[:,0]
+    np.save(f'results_bilstm_orig_{name}_{suffix}_{n_i}.npy',predictions)
+    predictions=model.predict(X_valid)[:,0]
+    np.save(f'results_valid_bilstm_orig_{name}_{suffix}_{n_i}.npy',predictions)
+    np.save(f'true_valid_bilstm_orig_{name}_{suffix}_{n_i}.npy',Yv)
 
 
 # In[ ]:
